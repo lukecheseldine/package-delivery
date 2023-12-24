@@ -1,0 +1,53 @@
+{
+  "name": "email-handler",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/email-handler/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/email-handler",
+        "main": "apps/email-handler/src/main.ts",
+        "tsConfig": "apps/email-handler/tsconfig.app.json",
+        "assets": ["apps/email-handler/src/assets"],
+        "webpackConfig": "apps/email-handler/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "email-handler:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "email-handler:build:development"
+        },
+        "production": {
+          "buildTarget": "email-handler:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/email-handler/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
