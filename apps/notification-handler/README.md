@@ -1,7 +1,3 @@
-# notification-handler
+# notification handler
 
-This library was generated with [Nx](https://nx.dev).
-
-## Running unit tests
-
-Run `nx test notification-handler` to execute the unit tests via [Jest](https://jestjs.io).
+Simple NodeJS app which continuously polls the SQS for new messages using sqs-consumer. Once it receives a message, it forwards it to main api.
