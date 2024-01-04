@@ -59,8 +59,8 @@ const userSchema = new mongoose.Schema({
 });
 
 /* If a user is deleted, cascade the delete to:
-    - their emails
-    - their SubscriptionGroup memberships
+    - their Emails
+    - their SubscriptionGroupMemberships
 */
 userSchema.pre(
   'deleteOne',
