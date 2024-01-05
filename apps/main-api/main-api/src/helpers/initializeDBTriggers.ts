@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 export const initializeDBTriggers = (db: mongoose.Connection) => {
   db.on('connected', () => {
     console.log(
-      `Connected to MongoDB at ${process.env.MONGO_URL}/${process.env.SUBSCRIPTIONS_DB_NAME}`
+      `Connected to MongoDB at ${process.env.MONGO_DB_URL}/${process.env.MONGO_DB_NAME}`
     );
   });
 

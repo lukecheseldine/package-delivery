@@ -1,11 +1,21 @@
 import express from 'express';
-import mongoose, { Schema } from 'mongoose';
-import 'dotenv/config';
+import mongoose from 'mongoose';
+import { config } from 'dotenv';
+import path from 'path';
 
 import { initializeDBTriggers } from './helpers/initializeDBTriggers';
 import { addExpressMiddleware } from './helpers/addExpressMiddleware';
+import { userRouter } from './routes/User/UserRoutes';
+import { subscriptionGroupRouter } from './routes/SubscriptionGroup/SubscriptionGroupRoutes';
+import { emailRouter } from './routes/Email/EmailRoutes';
 
-if (!process.env.MONGO_URL || !process.env.SUBSCRIPTIONS_DB_NAME) {
+const envPath = path.resolve(
+  __dirname,
+  '../../../../apps/main-api/main-api/.env'
+);
+config({ path: envPath });
+
+if (!process.env.MONGO_DB_URL || !process.env.MONGO_DB_NAME) {
   console.error('Required environment variables are not set!');
   process.exit(1);
 }
@@ -13,58 +23,13 @@ if (!process.env.MONGO_URL || !process.env.SUBSCRIPTIONS_DB_NAME) {
 const app = express();
 addExpressMiddleware(app);
 
-mongoose.connect(
-  `${process.env.MONGO_URL}/${process.env.SUBSCRIPTIONS_DB_NAME}`
-);
+mongoose.connect(`${process.env.MONGO_DB_URL}/${process.env.MONGO_DB_NAME}`);
 const db = mongoose.connection;
 initializeDBTriggers(db);
 
-const subscriptionSchema = new Schema({
-  email: String,
-  phone: String,
-});
-
-const Subscription = mongoose.model('Subscription', subscriptionSchema);
-
-app.post('/subscription', async (req, res) => {
-  if (!req.body.email || !req.body.phone) {
-    res.status(400).send('Bad Request: Missing required field');
-  }
-
-  const newSubscription = new Subscription({
-    email: req.body.email,
-    phone: req.body.phone,
-  });
-  try {
-    await newSubscription.save();
-    res.status(200).json({
-      email: newSubscription.email,
-      phone: newSubscription.phone,
-    });
-  } catch (error) {
-    console.error(`Error saving subscription: ${error}`);
-    res.status(500).send('Unable to save subscription');
-  }
-});
-
-app.delete('/subscription', async (req, res) => {
-  if (!req.body.email || !req.body.phone) {
-    res.status(400).send('Bad Request: Missing required field');
-  }
-  try {
-    await Subscription.deleteMany({
-      email: req.body.email,
-      phone: req.body.phone,
-    });
-    res.status(200).json({
-      email: req.body.email,
-      phone: req.body.phone,
-    });
-  } catch (error) {
-    console.error(`Error deleting subscription: ${error}`);
-    res.status(500).send('Unable to delete subscription');
-  }
-});
+app.use('/user', userRouter);
+app.use('/email', emailRouter);
+app.unsubscribe('/subscriptionGroup', subscriptionGroupRouter);
 
 const port = process.env.PORT || 3333;
 const server = app.listen(port, () => {

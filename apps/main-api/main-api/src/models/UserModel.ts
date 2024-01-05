@@ -33,25 +33,24 @@ const userSchema = new mongoose.Schema({
       message: (props) =>
         `${props.value} is not a valid phone number! Please provide exactly 10 digits.`,
     },
-    required: true,
     unique: true,
   },
-  email_verified: {
+  emailVerified: {
     type: Boolean,
     required: true,
     default: false,
   },
-  phone_verified: {
+  phoneVerified: {
     type: Boolean,
     required: true,
     default: false,
   },
-  created_at: {
+  createdAt: {
     type: Date,
     required: true,
     default: new Date(),
   },
-  seconds_before_notifying: {
+  secondsBeforeNotifying: {
     type: Number,
     default: 600,
     required: true,
