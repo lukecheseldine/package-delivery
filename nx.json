@@ -27,6 +27,10 @@
           "codeCoverage": true
         }
       }
+    },
+    "e2e": {
+      "cache": true,
+      "inputs": ["default", "^production"]
     }
   },
   "namedInputs": {
@@ -39,9 +43,29 @@
       "!{projectRoot}/src/test-setup.[jt]s",
       "!{projectRoot}/test-setup.[jt]s",
       "!{projectRoot}/.eslintrc.json",
-      "!{projectRoot}/eslint.config.js"
+      "!{projectRoot}/eslint.config.js",
+      "!{projectRoot}/cypress/**/*",
+      "!{projectRoot}/**/*.cy.[jt]s?(x)",
+      "!{projectRoot}/cypress.config.[jt]s"
     ],
     "sharedGlobals": []
   },
-  "nxCloudAccessToken": "Y2NlY2U4MmUtYWNhNC00ZDI1LTlmMTEtNzI4Yzc0YmUzZjRifHJlYWQtd3JpdGU="
+  "nxCloudAccessToken": "Y2NlY2U4MmUtYWNhNC00ZDI1LTlmMTEtNzI4Yzc0YmUzZjRifHJlYWQtd3JpdGU=",
+  "generators": {
+    "@nx/react": {
+      "application": {
+        "style": "styled-components",
+        "linter": "eslint",
+        "bundler": "webpack",
+        "babel": true
+      },
+      "component": {
+        "style": "styled-components"
+      },
+      "library": {
+        "style": "styled-components",
+        "linter": "eslint"
+      }
+    }
+  }
 }
