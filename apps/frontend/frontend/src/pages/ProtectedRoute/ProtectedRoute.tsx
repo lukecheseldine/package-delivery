@@ -22,14 +22,11 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 			// along to that page after they login, which is a nicer user experience
 			// than dropping them off on the home page.
 			navigate('/login', { state: { next: location } });
-			setIsAuthenticated(false);
-		} else {
-			setIsAuthenticated(true);
-			setIsLoading(false);
 		}
-	}, [user, navigate, location]);
+		setIsLoading(false);
+	}, [user, navigate]);
 
-	if (!isAuthenticated) {
+	if (!user) {
 		return null;
 	}
 

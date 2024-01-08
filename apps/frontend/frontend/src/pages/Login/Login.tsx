@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
 	TextField,
 	Button,
@@ -17,9 +17,16 @@ const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const userContext = useContext(UserContext);
+	const { user } = userContext;
 	const navigate = useNavigate();
 	const location = useLocation();
 	const next = location.state?.next;
+
+	useEffect(() => {
+		if (user) {
+			navigate('/home');
+		}
+	}, [user]);
 
 	const handleSignIn = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -30,8 +37,7 @@ const Login = () => {
 				password
 			);
 			userContext.setUser(user);
-			// TODO: test that this actually works: it doesnt :(
-			location ? navigate(next) : navigate('/home');
+			navigate('/home');
 		} catch (error) {
 			console.error(`Error logging in: ${error}`);
 		}

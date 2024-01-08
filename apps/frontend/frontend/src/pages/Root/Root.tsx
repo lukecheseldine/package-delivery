@@ -1,13 +1,29 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import NavBar from '../../components/NavBar/NavBar';
-import { Box, Stack } from '@mui/material';
-import { User } from 'firebase/auth';
+import { Box } from '@mui/material';
+import { User, onAuthStateChanged } from 'firebase/auth';
 import { UserContext } from '../../context/UserContext';
+import { auth } from '../../firebase';
 
 const Root = () => {
 	const [user, setUser] = useState<User | undefined>();
+	const [authLoaded, setAuthLoaded] = useState(false);
+
+	useEffect(() => {
+		onAuthStateChanged(auth, (authUser) => {
+			if (authUser) {
+				setUser(authUser);
+				setAuthLoaded(true);
+			} else {
+				setUser(undefined);
+				setAuthLoaded(true);
+			}
+		});
+
+		return;
+	}, [user]);
 
 	return (
 		<UserContext.Provider
